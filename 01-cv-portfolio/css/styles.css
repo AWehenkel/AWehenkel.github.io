@@ -200,7 +200,7 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
 7. EXPERIENCE SECTION
 --------------------------------- */
 
-.experience-section{ background: #28023D; color: #fff; }
+.experience-section{ background: #0b3267; color: #fff; }
 
 .experience .list > li{ display: block; position: relative; margin-bottom: 10px; padding-left: 20px; }
 
@@ -262,5 +262,16 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
 
 .copyright{     text-align: center;
     padding: 3px 0;
-    background: #28023D;
+    background: #0b3267;
     font-size: .6em;}
+
+
+
+.pulications li{
+	font-size: 0.8em;
+  list-style: circle;
+  display: list-item;
+}
+.pulications ul{
+		padding-left: 10px;
+}
