@@ -265,12 +265,35 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
     background: #0b3267;
     font-size: .6em;}
 
+.article-title{
+	padding-left: 5px;
+	font-size: .8em;
+  font-weight: 600;
+}
 
+.article-authors{
+	padding-left: 5px;
+	font-size: .7em;
+  font-weight: 400;
+}
+
+.article-journal{
+	padding-left: 5px;
+	font-size: .7em;
+  font-weight: 400;
+}
 
 .pulications li{
-	font-size: 0.8em;
-  list-style: circle;
+	font-size: 1em;
+  /* list-style: circle; */
   display: list-item;
+  margin-top: 5px;
+  /* height: 32px; */
+  vertical-align: middle;
+  display: list-item;
+  background: url(../../images/bullet.png) no-repeat left center;
+  padding-left: 45px;
+  margin: 15px 0;
 }
 .pulications ul{
 		padding-left: 10px;
