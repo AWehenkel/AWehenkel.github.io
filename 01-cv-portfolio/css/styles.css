@@ -123,6 +123,14 @@ header .downlad-btn{ padding: 15px 30px; border-radius: 4px; float: right; margi
 
 header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: translateY(-4px); }
 
+.downlad-btn{
+	padding: 5px;
+  border-radius: 4px;
+  border: solid 1px grey;
+  color: #464a4c;
+}
+
+.downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: translateY(-4px); }
 
 /* ---------------------------------
 4. INTRO SECTION
@@ -265,6 +273,43 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
     background: #0b3267;
     font-size: .6em;}
 
+@media only screen and (min-width: 544px) {
+	.article-title{
+		padding-left: 5px;
+		font-size: 1.5em;
+	  font-weight: 600;
+	}
+
+	.article-authors{
+		padding-left: 5px;
+		font-size: 1.1em;
+	  font-weight: 400;
+	}
+
+	.article-journal{
+		padding-left: 5px;
+		font-size: 1.1em;
+	  font-weight: 400;
+	}
+
+	.pulications li{
+		font-size: 1em;
+	  /* list-style: circle; */
+	  display: list-item;
+	  margin-top: 5px;
+	  /* height: 32px; */
+	  vertical-align: middle;
+	  display: list-item;
+	  background: url(../../images/bullet.png) no-repeat left center;
+	  padding-left: 45px;
+	  margin: 15px 0;
+	}
+	.pulications ul{
+			padding-left: 10px;
+	}
+}
+
+@media only screen and (min-width: 992px) {
 .article-title{
 	padding-left: 5px;
 	font-size: .8em;
@@ -297,4 +342,5 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
 }
 .pulications ul{
 		padding-left: 10px;
+}
 }
