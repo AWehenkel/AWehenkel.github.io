@@ -44,14 +44,8 @@ h1,h2,h3,h4,h5,h6{ line-height: 1.5; font-weight: inherit; }
 
 h1,h2,h3{ font-family: 'Poppins', cursive; }
 
-p{ line-height: 1.6; font-size: 1.05em; font-weight: 400; color: #777; }
 
-h1{ font-size: 4em; line-height: 1; }
-h2{ font-size: 2.2em; line-height: 1.1; }
-h3{ font-size: 1.8em; }
-h4{ font-size: 1.3em; }
-h5{ font-size: 1em; }
-h6{ font-size: .9em; letter-spacing: 1px; }
+
 
 a, button{ display: inline-block; text-decoration: none; color: inherit; line-height: 1;
 	-webkit-transition: all .25s ease-in-out; transition: all .25s ease-in-out; }
@@ -154,13 +148,7 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
 
 .intro .information > li{ display: block; margin: 5px 0; }
 
-.intro .social-icons > li > a{ height: 35px; line-height: 35px; width: 35px; border-radius: 20px;
-	overflow: hidden; z-index: 1; position: relative; margin: 0 5px 5px; background: #887392; color: #fff; }
 
-.intro .social-icons > li > a:after{ content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-	top: 0; z-index: -1; border-radius: 20px; background: #979aa2;
-	-webkit-transition: all .2s ease; transition: all .2s ease;
-	-webkit-transform: scale(0); transform: scale(0); }
 
 .intro .social-icons > li > a:hover:after{ -webkit-transform: scale(1); transform: scale(1); }
 
@@ -280,6 +268,9 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
 	  font-weight: 600;
 	}
 
+	p{ line-height: 1.6; font-size: 1.5em; font-weight: 400; color: #777; }
+
+
 	.article-authors{
 		padding-left: 5px;
 		font-size: 1.1em;
@@ -307,6 +298,24 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
 	.pulications ul{
 			padding-left: 10px;
 	}
+
+	.pulications li{
+			margin-bottom: 30px;
+	}
+	h1{ font-size: 5em; line-height: 1; }
+	h2{ font-size: 3.2em; line-height: 1.1; }
+	h3{ font-size: 2.3em; }
+	h4{ font-size: 1.8em; }
+	h5{ font-size: 1.3em; }
+	h6{ font-size: 1.1em; letter-spacing: 1px; }
+
+	.intro .social-icons > li > a{ height: 50px; line-height: 50px; width: 50px; border-radius: 40px; font-size: 2em;
+		overflow: hidden; z-index: 1; position: relative; margin: 0 15px 15px; background: #887392; color: #fff; }
+
+	.intro .social-icons > li > a:after{ content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+		top: 0; z-index: -1; border-radius: 40px; background: #979aa2;
+		-webkit-transition: all .2s ease; transition: all .2s ease;
+		-webkit-transform: scale(0); transform: scale(0); }
 }
 
 @media only screen and (min-width: 992px) {
@@ -315,6 +324,7 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
 	font-size: .8em;
   font-weight: 600;
 }
+p{ line-height: 1.6; font-size: 1.05em; font-weight: 400; color: #777; }
 
 .article-authors{
 	padding-left: 5px;
@@ -343,4 +353,21 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
 .pulications ul{
 		padding-left: 10px;
 }
+.pulications li{
+		margin-bottom: 10px; 
+}
+h1{ font-size: 4em; line-height: 1; }
+h2{ font-size: 2.2em; line-height: 1.1; }
+h3{ font-size: 1.8em; }
+h4{ font-size: 1.3em; }
+h5{ font-size: 1em; }
+h6{ font-size: .9em; letter-spacing: 1px; }
+
+.intro .social-icons > li > a{ height: 35px; line-height: 35px; width: 35px; border-radius: 20px;
+	overflow: hidden; z-index: 1; position: relative; margin: 0 5px 5px; background: #887392; color: #fff; }
+
+.intro .social-icons > li > a:after{ content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+	top: 0; z-index: -1; border-radius: 20px; background: #979aa2;
+	-webkit-transition: all .2s ease; transition: all .2s ease;
+	-webkit-transform: scale(0); transform: scale(0); }
 }
