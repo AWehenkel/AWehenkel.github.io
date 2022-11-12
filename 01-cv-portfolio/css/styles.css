@@ -46,7 +46,6 @@ h1,h2,h3{ font-family: 'Poppins', cursive; }
 
 
 
-
 a, button{ display: inline-block; text-decoration: none; color: inherit; line-height: 1;
 	-webkit-transition: all .25s ease-in-out; transition: all .25s ease-in-out; }
 
@@ -268,7 +267,13 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
 	  font-weight: 600;
 	}
 
-	p{ line-height: 1.6; font-size: 1.5em; font-weight: 400; color: #777; }
+	.heading-wrapper{
+		margin-top: -5px;
+		padding: 10px 15px 8px !important;
+	}
+
+	p{ line-height: 1.6; font-size: 1.5em; font-weight: 400; color: #777; text-align: justify;
+}
 
 
 	.article-authors{
@@ -324,7 +329,7 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
 	font-size: .8em;
   font-weight: 600;
 }
-p{ line-height: 1.6; font-size: 1.05em; font-weight: 400; color: #777; }
+p{ line-height: 1.6; font-size: 1.05em; font-weight: 400; color: #777; text-align: justify;}
 
 .article-authors{
 	padding-left: 5px;
