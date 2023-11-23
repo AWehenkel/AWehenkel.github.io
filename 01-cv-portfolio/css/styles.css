@@ -307,6 +307,28 @@ header .downlad-btn:hover{ -webkit-transform: translateY(-4px); transform: trans
 	.pulications li{
 			margin-bottom: 40px;
 	}
+
+	.books li{
+		font-size: 1em;
+	  /* list-style: circle; */
+	  min-height: 2em;
+	  display: list-item;
+	  margin-top: 5px;
+	  /* height: 32px; */
+	  vertical-align: middle;
+	  display: list-item;
+	  background: url(../../images/book.png) no-repeat left center;
+	  padding-left: 45px;
+	  padding-top: 3px;
+	  margin: 15px 0;
+	}
+	.books ul{
+			padding-left: 10px;
+	}
+
+	.books li{
+			margin-bottom: 0px;
+	}
 	h1{ font-size: 5em; line-height: 1; }
 	h2{ font-size: 3.2em; line-height: 1.1; }
 	h3{ font-size: 2.3em; }
