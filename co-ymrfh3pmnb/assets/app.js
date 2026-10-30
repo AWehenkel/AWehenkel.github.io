@@ -354,6 +354,23 @@
 
     var me = { name: null, nh: null, eh: null };
 
+    // Suivi des convocations (Google Sheet via Apps Script, voir tools/suivi_apps_script.gs).
+    // Vide = aucun suivi.
+    var SUIVI_URL = 'https://script.google.com/macros/s/AKfycbxivuJLxnezWbkV3mEXh43OiHwjEz0Y4txB19ROzW2kloYweyAdF7azHqcLGZnWwVnQ0A/exec';
+    function suivi(evt, detail) {
+      if (!SUIVI_URL || !me.name) { return; }
+      var corps = JSON.stringify({
+        nom: me.name, evt: evt, detail: detail,
+        appareil: /iPhone|iPad|Android|Mobi/i.test(navigator.userAgent) ? 'mobile' : 'ordinateur'
+      });
+      try {
+        if (navigator.sendBeacon && navigator.sendBeacon(SUIVI_URL, new Blob([corps], { type: 'text/plain' }))) { return; }
+      } catch (e) { /* on essaie fetch */ }
+      try {
+        fetch(SUIVI_URL, { method: 'POST', mode: 'no-cors', keepalive: true, headers: { 'Content-Type': 'text/plain' }, body: corps });
+      } catch (e) { /* le suivi ne doit jamais gêner le site */ }
+    }
+
     function sha40(salt, value) {
       var data = new TextEncoder().encode(salt + '|' + String(value).trim().toLowerCase());
       return crypto.subtle.digest('SHA-256', data).then(function (buf) {
@@ -618,7 +635,7 @@
       if (!video.ended && !revoirMode) { voile.hidden = false; }
     });
     video.addEventListener('ended', function () {
-      if (!revoirMode) { store(vuKey(), '1'); store(posKey(), '0'); }
+      if (!revoirMode) { store(vuKey(), '1'); store(posKey(), '0'); suivi('video_finie'); }
       Array.prototype.forEach.call(document.querySelectorAll('.conv-fermer'), function (b) { b.remove(); });
       video.controls = false;
       try { if (document.fullscreenElement) { document.exitFullscreen(); } } catch (e) { /* rien */ }
@@ -658,6 +675,7 @@
       }
       clearTimeout(passerTimer);
       store(vuKey(), '1'); store(posKey(), '0'); store(key() + '-passe', '1');
+      suivi('video_passee', fmt(video.currentTime));
       video.pause();
       try { if (document.fullscreenElement) { document.exitFullscreen(); } } catch (e) { /* rien */ }
       document.getElementById('conv-fin-titre').firstChild.textContent = 'Transmission coupée. Ce n\'est pas fini, ';
@@ -716,6 +734,7 @@
           return;
         }
         me.name = name; me.nh = h[0]; me.eh = h[1]; me.jeton = jeton;
+        suivi('ouvert');
         document.getElementById('conv-nom').textContent = name;
         document.getElementById('conv-nom2').textContent = name;
         document.getElementById('conv-num').textContent = h[0].slice(0, 4).toUpperCase();
@@ -746,6 +765,7 @@
       var score = Math.round((sum / MAXSUM) * 100);
       var retenu = CFG.elect.indexOf(me.eh) !== -1;
       store(key(), score + '|' + (retenu ? '1' : '0'));
+      suivi('questionnaire', score);
       quiz.hidden = true;
       result.hidden = false;
       result.scrollIntoView({ behavior: 'smooth', block: 'start' });
