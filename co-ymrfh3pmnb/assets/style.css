@@ -621,3 +621,4 @@ body.questionnaire .jeu { margin-top: 0; border-top: 0; padding-top: 0; }
   .conv-progres { order: -1; flex: 1 0 100%; }
   .conv-passer { margin-left: auto; }
 }
+.annonce-chance { font-family: var(--display); font-style: italic; font-size: 1.25rem; color: var(--brass-soft); margin: 0.35rem 0 0.6rem; }

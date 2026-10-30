@@ -479,18 +479,19 @@
         var b = el('p', 'annonce-binome');
         b.appendChild(document.createTextNode('Tu organises avec '));
         var strong = document.createElement('b'); strong.textContent = a.binome; b.appendChild(strong);
-        b.appendChild(document.createTextNode('. Vous êtes les deux seules personnes au courant — avec le grand maître qui tire les ficelles.'));
+        b.appendChild(document.createTextNode('.'));
+        el('p', 'annonce-chance', 'Vraiment, bonne chance…');
+        el('p', null, 'Vous êtes les deux seules personnes au courant — avec le grand maître qui tire les ficelles.');
         el('h4', null, 'Le cahier des charges');
         var ul = el('ul', 'annonce-regles');
         [
           "Le week-end a lieu dans les six prochains mois. La date est à vous de la trouver : celle qui convient au plus grand nombre.",
           "Destination et activités libres. Faites-vous plaisir, faites plaisir aux autres.",
-          "Le secret d'abord : vos identités restent cachées. Le lieu et le programme se livrent par énigmes, voire pas du tout jusqu'au jour J.",
-          "Les cinq lois non écrites s'appliquent. Le warpool reste banni."
+          "Le secret d'abord : vos identités restent cachées. Le lieu et le programme se livrent par énigmes, voire pas du tout jusqu'au jour J."
         ].forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
         el('h4', null, 'Votre canal anonyme');
         el('p', null, "Créez à deux une adresse e-mail dont le nom ne trahit rien — Proton Mail est gratuit et ne demande en général pas de numéro de téléphone (proton.me). Partagez-vous le mot de passe, et écrivez au groupe uniquement depuis cette adresse, sans signer.");
-        el('p', null, 'Les ' + a.adresses.length + ' autres membres à convoquer :');
+        el('p', null, 'Les ' + a.adresses.length + ' membres du registre, vous compris\u00a0:');
         var pre = el('pre', 'annonce-adresses', a.adresses.join(', '));
         var copier = el('button', null, 'Copier les adresses');
         copier.type = 'button';
