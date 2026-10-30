@@ -364,6 +364,21 @@
       });
     }
 
+    // Déchiffre l'annonce réservée aux élus (flux SHA-256, cf. chiffrer() dans tools/tirage.py).
+    function dechiffrer(sel, jeton, hex) {
+      var n = hex.length / 2, blocs = [];
+      for (var i = 0; i <= Math.floor(n / 32); i++) {
+        blocs.push(crypto.subtle.digest('SHA-256', new TextEncoder().encode(sel + '|' + jeton + '|' + i)));
+      }
+      return Promise.all(blocs).then(function (bufs) {
+        var out = new Uint8Array(n);
+        for (var k = 0; k < n; k++) {
+          out[k] = parseInt(hex.substr(2 * k, 2), 16) ^ new Uint8Array(bufs[Math.floor(k / 32)])[k % 32];
+        }
+        return JSON.parse(new TextDecoder().decode(out));
+      });
+    }
+
     function store(key, val) {
       try { localStorage.setItem(key, val); } catch (e) { /* navigation privée */ }
     }
@@ -434,7 +449,7 @@
       if (retenu) {
         h.textContent = me.name + ' — exactement ce dont le CO a besoin.';
         p1.textContent = "Score enregistré, profil retenu. Tu fais partie du comité d'organisation de la première édition de la saison II. À partir de maintenant, tu n'es plus un participant : tu es le problème de tous les autres.";
-        p2.textContent = "Tu recevras tes instructions et ton accès par un autre canal. Tu n'organises pas seul, et tu ne sais pas encore avec qui : c'est voulu. N'en parle à personne, pas même à la personne avec qui tu t'apprêtes à en parler.";
+        p2.textContent = '';
       } else {
         h.textContent = 'Dommage, ' + me.name + '. Tu dois encore faire des efforts.';
         p1.textContent = 'Score enregistré, profil non retenu pour cette édition. Le Comité te remercie de ta candidature et te souhaite un week-end dont tu ne sauras rien.';
@@ -446,9 +461,47 @@
       box.appendChild(lb);
       box.appendChild(h);
       box.appendChild(p1);
-      box.appendChild(p2);
+      if (p2.textContent) { box.appendChild(p2); }
       verdict.appendChild(box);
       verdict.hidden = false;
+      if (retenu) { annonce(box); }
+    }
+
+    function annonce(box) {
+      var chiffre = CFG.annonce && CFG.annonce[me.eh];
+      if (!chiffre || !me.jeton) { return; }
+      dechiffrer(CFG.saltAnnonce, me.jeton, chiffre).then(function (a) {
+        var sec = document.createElement('div');
+        sec.className = 'annonce';
+        function el(tag, cls, txt) { var e = document.createElement(tag); if (cls) { e.className = cls; } if (txt) { e.textContent = txt; } sec.appendChild(e); return e; }
+        el('p', 'eyebrow', 'Ordre de mission · Saison II · Édition I');
+        var b = el('p', 'annonce-binome');
+        b.appendChild(document.createTextNode('Tu organises avec '));
+        var strong = document.createElement('b'); strong.textContent = a.binome; b.appendChild(strong);
+        b.appendChild(document.createTextNode('. Vous êtes les deux seules personnes au courant — avec le grand maître qui tire les ficelles.'));
+        el('h4', null, 'Le cahier des charges');
+        var ul = el('ul', 'annonce-regles');
+        [
+          "Le week-end a lieu dans les six prochains mois. La date est à vous de la trouver : celle qui convient au plus grand nombre.",
+          "Destination et activités libres. Faites-vous plaisir, faites plaisir aux autres.",
+          "Le secret d'abord : vos identités restent cachées. Le lieu et le programme se livrent par énigmes, voire pas du tout jusqu'au jour J.",
+          "Les cinq lois non écrites s'appliquent. Le warpool reste banni."
+        ].forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+        el('h4', null, 'Votre canal anonyme');
+        el('p', null, "Créez à deux une adresse e-mail dont le nom ne trahit rien — Proton Mail est gratuit et ne demande en général pas de numéro de téléphone (proton.me). Partagez-vous le mot de passe, et écrivez au groupe uniquement depuis cette adresse, sans signer.");
+        el('p', null, 'Les ' + a.adresses.length + ' autres membres à convoquer :');
+        var pre = el('pre', 'annonce-adresses', a.adresses.join(', '));
+        var copier = el('button', null, 'Copier les adresses');
+        copier.type = 'button';
+        copier.addEventListener('click', function () {
+          var fin = function () { copier.textContent = 'Adresses copiées ✓'; };
+          if (navigator.clipboard) { navigator.clipboard.writeText(a.adresses.join(', ')).then(fin, function () {}); }
+          else { var r = document.createRange(); r.selectNodeContents(pre); var sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); }
+        });
+        el('p', 'annonce-fin', "N'en parle à personne, pas même à la personne avec qui tu t'apprêtes à en parler. Cette page reste accessible avec ton lien : tu peux y revenir.");
+        el('p', 'annonce-signature', '— Le Comité Organisateur');
+        box.appendChild(sec);
+      })['catch'](function () { /* annonce illisible : le verdict suffit */ });
     }
 
     function runDeliberation(score, retenu) {
@@ -639,7 +692,7 @@
           ecran('refus');
           return;
         }
-        me.name = name; me.nh = h[0]; me.eh = h[1];
+        me.name = name; me.nh = h[0]; me.eh = h[1]; me.jeton = jeton;
         document.getElementById('conv-nom').textContent = name;
         document.getElementById('conv-nom2').textContent = name;
         document.getElementById('conv-num').textContent = h[0].slice(0, 4).toUpperCase();

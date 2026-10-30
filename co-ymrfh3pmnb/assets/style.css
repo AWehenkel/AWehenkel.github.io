@@ -602,3 +602,14 @@ body.questionnaire .jeu { margin-top: 0; border-top: 0; padding-top: 0; }
   .conv-etapes { font-size: 1rem; }
   .conv-barre { gap: 0.6rem; }
 }
+
+/* ---- ordre de mission (élus seulement) ---- */
+.annonce { margin-top: 1.6rem; border: 1px solid var(--brass); background: rgba(201, 162, 77, 0.06); padding: 1.3rem 1.1rem; }
+.annonce .eyebrow { color: var(--brass); margin-bottom: 0.8rem; }
+.annonce h4 { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brass-soft); font-weight: 400; margin: 1.3rem 0 0.5rem; }
+.annonce-binome { font-size: 1.15rem; margin: 0; }
+.annonce-binome b { font-family: var(--display); font-size: 1.6rem; color: var(--brass); }
+.annonce-regles { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.45rem; }
+.annonce-adresses { white-space: pre-wrap; word-break: break-all; font-family: var(--mono); font-size: 0.78rem; background: var(--ink-deep); border: 1px solid var(--rule); padding: 0.7rem; margin: 0 0 0.6rem; color: var(--vellum); }
+.annonce-fin { margin-top: 1.2rem; font-style: italic; }
+.annonce-signature { font-family: var(--display); text-align: right; margin: 0.5rem 0 0; }
