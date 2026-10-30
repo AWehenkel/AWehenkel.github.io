@@ -37,9 +37,22 @@
   <div class="conv-ecran" id="conv-intro" hidden>
     <p class="eyebrow">Convocation nº <span id="conv-num">—</span> · Saison II</p>
     <h1><span id="conv-nom">—</span>, le Comité a un message pour toi.</h1>
-    <p class="conv-msg">Durée : 3 minutes 17. Monte le son. On ne peut ni avancer, ni passer : le dossier ne s'ouvre qu'à la fin de la transmission.</p>
+    <p class="conv-msg">Durée : 3 minutes 17. Monte le son. On ne peut ni avancer, ni passer.</p>
+    <ol class="conv-etapes">
+      <li><b>La transmission</b> — 3 min 17, en entier.</li>
+      <li><b>Ta candidature</b> — 8 questions, environ 2 minutes, juste après.</li>
+      <li><b>Le verdict</b> — rendu une seule fois.</li>
+    </ol>
+    <p class="conv-alerte">Ne ferme pas la page à la fin de la vidéo : sans tes réponses, ton dossier n'existe pas.</p>
     <button type="button" class="primary" id="conv-go">Lancer la transmission</button>
     <p class="note" id="conv-reprise" hidden>Transmission interrompue : elle reprendra où tu l'as laissée.</p>
+  </div>
+
+  <div class="conv-ecran" id="conv-fin" hidden>
+    <p class="eyebrow">Fin de la transmission</p>
+    <h1>Ce n'est pas fini, <span id="conv-nom2">—</span>.</h1>
+    <p class="conv-msg">Ton dossier est ouvert mais vide. Huit questions, deux minutes, une seule tentative : le Comité délibère sur tes réponses, et sur rien d'autre.</p>
+    <button type="button" class="primary" id="conv-dossier">Remplir ma candidature</button>
   </div>
 
   <div class="conv-lecteur" id="conv-lecteur" hidden>
@@ -52,6 +65,7 @@
       <button type="button" id="conv-pause" aria-label="Pause">❚❚</button>
       <div class="conv-progres" aria-hidden="true"><div id="conv-fil"></div></div>
       <span id="conv-temps">0:00 / 3:17</span>
+      <span class="conv-ensuite">ensuite : 8 questions</span>
       <button type="button" id="conv-plein" aria-label="Plein écran">⛶</button>
     </div>
     <div class="conv-pause-voile" id="conv-voile" hidden><button type="button" class="primary" id="conv-reprendre">Reprendre la transmission</button></div>

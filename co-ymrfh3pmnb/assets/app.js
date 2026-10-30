@@ -479,6 +479,7 @@
       attente: document.getElementById('conv-attente'),
       refus: document.getElementById('conv-refus'),
       intro: document.getElementById('conv-intro'),
+      fin: document.getElementById('conv-fin'),
       lecteur: document.getElementById('conv-lecteur')
     };
     var video = document.getElementById('conv-video');
@@ -509,6 +510,7 @@
 
     function ouvrirSite() {
       document.body.classList.remove('verrou');
+      document.body.classList.add('questionnaire');   // après la vidéo : rien d'autre que la candidature
       conv.hidden = true;
       try { if (document.fullscreenElement) { document.exitFullscreen(); } } catch (e) { /* rien */ }
     }
@@ -563,6 +565,11 @@
       if (!revoirMode) { store(vuKey(), '1'); store(posKey(), '0'); }
       Array.prototype.forEach.call(document.querySelectorAll('.conv-fermer'), function (b) { b.remove(); });
       video.controls = false;
+      try { if (document.fullscreenElement) { document.exitFullscreen(); } } catch (e) { /* rien */ }
+      if (revoirMode || recall(key())) { ouvrirSite(); lancerCandidature(true); return; }
+      ecran('fin');   // première fois : on annonce le questionnaire avant de l'ouvrir
+    });
+    document.getElementById('conv-dossier').addEventListener('click', function () {
       ouvrirSite();
       lancerCandidature(true);
     });
@@ -608,6 +615,13 @@
       scr.lecteur.appendChild(fermer);
     });
 
+    // Fermer la page avec un questionnaire non soumis : le navigateur demande confirmation.
+    window.addEventListener('beforeunload', function (e) {
+      var enCours = !quiz.hidden && me.nh && !recall(key());
+      var enVideo = !document.body.classList.contains('questionnaire') && !scr.lecteur.hidden && !revoirMode;
+      if (enCours || enVideo) { e.preventDefault(); e.returnValue = ''; }
+    });
+
     // --- point d'entrée ------------------------------------------------------
     window.addEventListener('hashchange', function () { if (/k=/.test(location.hash)) { location.reload(); } });
     (function entree() {
@@ -627,6 +641,7 @@
         }
         me.name = name; me.nh = h[0]; me.eh = h[1];
         document.getElementById('conv-nom').textContent = name;
+        document.getElementById('conv-nom2').textContent = name;
         document.getElementById('conv-num').textContent = h[0].slice(0, 4).toUpperCase();
         if (recall(vuKey()) === '1') {      // transmission déjà vue : accès direct
           ouvrirSite();
