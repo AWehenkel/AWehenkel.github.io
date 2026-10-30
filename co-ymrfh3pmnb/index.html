@@ -18,7 +18,45 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..600&family=EB+Garamond:ital,wght@0,400..600;1,400..500&family=Courier+Prime:wght@400;700&display=swap">
 <link rel="stylesheet" href="assets/style.css">
 </head>
-<body>
+<body class="verrou">
+
+<!-- Convocation : verrou par lien personnel, puis visionnage obligatoire de la transmission -->
+<div id="convocation" role="dialog" aria-modal="true" aria-labelledby="conv-titre">
+  <div class="conv-ecran" id="conv-attente">
+    <p class="eyebrow">Comité Organisateur · Transmission chiffrée</p>
+    <p class="conv-msg">Vérification de la convocation…</p>
+  </div>
+
+  <div class="conv-ecran" id="conv-refus" hidden>
+    <p class="eyebrow">Accès sur convocation uniquement</p>
+    <h1 id="conv-titre">Le Comité ne te connaît pas.</h1>
+    <p class="conv-msg">Ces archives ne s'ouvrent qu'avec le lien personnel reçu par e-mail. Ouvre-le depuis ta boîte : il t'identifie, et il ne marche que pour toi.</p>
+    <p class="note">Pas de lien ? Kransvelt non plus. Écris au Comité.</p>
+  </div>
+
+  <div class="conv-ecran" id="conv-intro" hidden>
+    <p class="eyebrow">Convocation nº <span id="conv-num">—</span> · Saison II</p>
+    <h1><span id="conv-nom">—</span>, le Comité a un message pour toi.</h1>
+    <p class="conv-msg">Durée : 3 minutes 17. Monte le son. On ne peut ni avancer, ni passer : le dossier ne s'ouvre qu'à la fin de la transmission.</p>
+    <button type="button" class="primary" id="conv-go">Lancer la transmission</button>
+    <p class="note" id="conv-reprise" hidden>Transmission interrompue : elle reprendra où tu l'as laissée.</p>
+  </div>
+
+  <div class="conv-lecteur" id="conv-lecteur" hidden>
+    <video id="conv-video" playsinline preload="metadata" disablepictureinpicture disableremoteplayback
+           controlslist="nodownload noplaybackrate nofullscreen noremoteplayback"
+           poster="assets/video/il-est-ou.jpg">
+      <source src="assets/video/il-est-ou.mp4" type="video/mp4">
+    </video>
+    <div class="conv-barre">
+      <button type="button" id="conv-pause" aria-label="Pause">❚❚</button>
+      <div class="conv-progres" aria-hidden="true"><div id="conv-fil"></div></div>
+      <span id="conv-temps">0:00 / 3:17</span>
+      <button type="button" id="conv-plein" aria-label="Plein écran">⛶</button>
+    </div>
+    <div class="conv-pause-voile" id="conv-voile" hidden><button type="button" class="primary" id="conv-reprendre">Reprendre la transmission</button></div>
+  </div>
+</div>
 
 <div class="page">
 
@@ -223,18 +261,13 @@
     <h2>Qui sera Andrea &amp; Kransvelt ?</h2>
     <div class="rules">
       <p>Onze des douze membres du registre ont déjà porté la charge d'organisateur. Andrea n'a jamais rien organisé. Et il faut ici mentionner Kransvelt, inscrit au registre depuis l'origine, convoqué à chaque tirage, jamais aperçu, jamais photographié, et dont on ne sait même pas s'il faut continuer à l'attendre.</p>
-      <p>La saison II commence par une candidature. Huit questions, un score, un verdict. Le Comité délibère une seule fois par adresse : réfléchis avant de répondre, personne ne repasse les plats.</p>
+      <p>La saison II commence par une candidature. Huit questions, un score, un verdict. Le Comité délibère une seule fois par convocation : réfléchis avant de répondre, personne ne repasse les plats.</p>
     </div>
 
     <div class="panel" id="gate">
-      <h3>Étape 1 — Vérification au registre</h3>
-      <form id="gate-form" novalidate>
-        <label class="field" for="co-email">Ton adresse e-mail, telle qu'elle figure au registre du Comité</label>
-        <input type="email" id="co-email" name="email" autocomplete="email" placeholder="prenom.nom@exemple.be" required>
-        <button type="submit" class="primary" id="gate-btn">Me présenter au Comité</button>
-        <div class="error" id="gate-error" hidden></div>
-      </form>
-      <p class="note">Ton adresse n'est transmise à personne et ne quitte pas ton navigateur : elle est comparée sur place à une empreinte.</p>
+      <h3>Étape 1 — Convocation vérifiée</h3>
+      <p class="conv-ident">Candidat·e identifié·e par lien personnel : <b id="gate-nom">—</b></p>
+      <button type="button" id="revoir">Revoir la transmission</button>
     </div>
 
     <div class="panel" id="quiz" hidden>

@@ -522,3 +522,35 @@ fieldset { border: 0; padding: 0; margin: 0; }
   .preambule .lede::first-letter { font-size: 2.9rem; }
   .souviens { padding-inline: 1rem; }
 }
+
+/* ---- convocation : verrou + transmission obligatoire ---- */
+body.verrou { overflow: hidden; }
+body.verrou .page { display: none; }
+#convocation {
+  position: fixed; inset: 0; z-index: 50;
+  background: var(--ink-deep);
+  background-image: radial-gradient(90% 60% at 50% 0%, rgba(192, 74, 49, 0.16), transparent 70%);
+  display: flex; align-items: center; justify-content: center;
+  padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+}
+.conv-ecran { max-width: 38rem; text-align: center; display: grid; gap: 1.1rem; justify-items: center; }
+.conv-ecran h1 { font-size: clamp(2rem, 8vw, 3.4rem); }
+.conv-msg { font-size: 1.12rem; color: var(--vellum); margin: 0; text-wrap: pretty; }
+#conv-attente .conv-msg { font-family: var(--mono); font-size: 0.85rem; color: var(--vellum-dim); animation: surface 1.2s ease infinite alternate; }
+.conv-lecteur { position: fixed; inset: 0; background: #000; display: flex; flex-direction: column; }
+.conv-lecteur video { flex: 1 1 auto; width: 100%; min-height: 0; object-fit: contain; background: #000; }
+.conv-barre {
+  display: flex; align-items: center; gap: 0.9rem;
+  padding: 0.6rem max(14px, env(safe-area-inset-right)) max(0.7rem, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  font-family: var(--mono); font-size: 0.8rem; color: var(--vellum-dim); background: #000;
+}
+.conv-barre button { padding: 0.35rem 0.7rem; min-width: 2.6rem; }
+.conv-progres { flex: 1; height: 4px; background: var(--rule); position: relative; overflow: hidden; }
+#conv-fil { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--seal); }
+.conv-pause-voile {
+  position: absolute; inset: 0 0 3.2rem 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+}
+.conv-fermer { position: absolute; top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); z-index: 2; background: rgba(0,0,0,.6); }
+.conv-ident { margin: 0 0 1rem; }
+.conv-ident b { color: var(--brass); font-family: var(--display); font-size: 1.25rem; }

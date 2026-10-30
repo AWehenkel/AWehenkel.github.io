@@ -333,7 +333,7 @@
     }, 0);
 
     var DELIB = [
-      "Vérification de l'adresse au registre…",
+      "Vérification de la convocation…",
       'Croisement avec les six éditions précédentes…',
       "Analyse de l'aptitude logistique déclarée…",
       'Consultation de Kransvelt… (pas de réponse)',
@@ -341,8 +341,6 @@
     ];
 
     var gate = document.getElementById('gate');
-    var gateForm = document.getElementById('gate-form');
-    var gateErr = document.getElementById('gate-error');
     var quiz = document.getElementById('quiz');
     var quizHead = document.getElementById('quiz-head');
     var quizForm = document.getElementById('quiz-form');
@@ -351,7 +349,7 @@
     var result = document.getElementById('result');
     var delib = document.getElementById('deliberation');
     var verdict = document.getElementById('verdict');
-    if (!gateForm || !quizForm || !CFG) { return; }
+    if (!quizForm || !CFG) { return; }
 
     var me = { name: null, nh: null, eh: null };
 
@@ -471,52 +469,175 @@
 
     function key() { return 'co-' + (CFG.edition || 'x') + '-' + me.nh; }
 
-    gateForm.addEventListener('submit', function (ev) {
-      ev.preventDefault();
-      gateErr.hidden = true;
-      var raw = document.getElementById('co-email').value;
-      if (!raw || raw.indexOf('@') === -1) {
-        gateErr.textContent = 'Il faut une adresse e-mail. Même Kransvelt en a une, paraît-il.';
-        gateErr.hidden = false;
-        return;
+    // ---------------------------------------------------------------
+    // Convocation : le lien personnel (…/#k=<jeton>) identifie le membre,
+    // la transmission vidéo doit être vue en entier, puis le questionnaire.
+    // ---------------------------------------------------------------
+    var JETON_KEY = 'co-jeton';
+    var conv = document.getElementById('convocation');
+    var scr = {
+      attente: document.getElementById('conv-attente'),
+      refus: document.getElementById('conv-refus'),
+      intro: document.getElementById('conv-intro'),
+      lecteur: document.getElementById('conv-lecteur')
+    };
+    var video = document.getElementById('conv-video');
+    var fil = document.getElementById('conv-fil');
+    var temps = document.getElementById('conv-temps');
+    var btnPause = document.getElementById('conv-pause');
+    var btnPlein = document.getElementById('conv-plein');
+    var voile = document.getElementById('conv-voile');
+    var revoirMode = false;   // revisionnage libre après la première fois
+    var vu = 0;               // plus loin point atteint (anti-saut)
+
+    function ecran(nom) {
+      Object.keys(scr).forEach(function (k) { scr[k].hidden = k !== nom; });
+    }
+    function lireJeton() {
+      var m = (location.hash + '&' + location.search).match(/[#?&]k=([0-9a-fA-F]{8,64})/);
+      if (m) {
+        store(JETON_KEY, m[1].toLowerCase());
+        // retire le jeton de la barre d'adresse : pas de fuite par capture d'écran ou partage
+        try { history.replaceState(null, '', location.pathname); } catch (e) { /* tant pis */ }
+        return m[1].toLowerCase();
       }
+      return recall(JETON_KEY);
+    }
+    function vuKey() { return key() + '-vu'; }
+    function posKey() { return key() + '-pos'; }
+    function fmt(t) { t = Math.max(0, Math.floor(t || 0)); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); }
+
+    function ouvrirSite() {
+      document.body.classList.remove('verrou');
+      conv.hidden = true;
+      try { if (document.fullscreenElement) { document.exitFullscreen(); } } catch (e) { /* rien */ }
+    }
+
+    function lancerCandidature(versQuestionnaire) {
+      document.getElementById('gate-nom').textContent = me.name;
+      var saved = recall(key());
+      if (saved) {
+        var parts = saved.split('|');
+        quiz.hidden = true;
+        result.hidden = false;
+        delib.innerHTML = '';
+        var d = document.createElement('div');
+        d.textContent = "› Le Comité ne délibère qu'une fois par convocation. Verdict déjà rendu.";
+        delib.appendChild(d);
+        showVerdict(parseInt(parts[0], 10), parts[1] === '1');
+      } else {
+        quizHead.textContent = "Étape 2 — Évaluation d'aptitude · candidat : " + me.name;
+        quiz.hidden = false;
+      }
+      if (versQuestionnaire) {
+        setTimeout(function () {
+          (saved ? result : quiz).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 60);
+      }
+    }
+
+    // --- le lecteur : pas de commandes natives, pas d'avance rapide -----------
+    function majBarre() {
+      var d = video.duration || 197;
+      fil.style.width = (100 * video.currentTime / d).toFixed(2) + '%';
+      temps.textContent = fmt(video.currentTime) + ' / ' + fmt(d);
+    }
+    video.addEventListener('timeupdate', function () {
+      if (!revoirMode) {
+        if (video.currentTime > vu + 1.5) { video.currentTime = vu; return; }
+        vu = Math.max(vu, video.currentTime);
+        store(posKey(), String(Math.floor(vu)));
+      }
+      majBarre();
+    });
+    video.addEventListener('seeking', function () {
+      if (!revoirMode && video.currentTime > vu + 1.5) { video.currentTime = vu; }
+    });
+    video.addEventListener('ratechange', function () { if (!revoirMode) { video.playbackRate = 1; } });
+    video.addEventListener('play', function () { btnPause.textContent = '❚❚'; voile.hidden = true; });
+    video.addEventListener('pause', function () {
+      btnPause.textContent = '▶';
+      if (!video.ended && !revoirMode) { voile.hidden = false; }
+    });
+    video.addEventListener('ended', function () {
+      if (!revoirMode) { store(vuKey(), '1'); store(posKey(), '0'); }
+      Array.prototype.forEach.call(document.querySelectorAll('.conv-fermer'), function (b) { b.remove(); });
+      video.controls = false;
+      ouvrirSite();
+      lancerCandidature(true);
+    });
+    video.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden && !video.paused && !revoirMode) { video.pause(); }
+    });
+    btnPause.addEventListener('click', function () { if (video.paused) { video.play(); } else { video.pause(); } });
+    document.getElementById('conv-reprendre').addEventListener('click', function () { video.play(); });
+    var lecteurEl = scr.lecteur;
+    if (lecteurEl.requestFullscreen) {
+      btnPlein.addEventListener('click', function () {
+        if (document.fullscreenElement) { document.exitFullscreen(); } else { lecteurEl.requestFullscreen().catch(function () {}); }
+      });
+    } else {
+      btnPlein.hidden = true;   // iPhone : le plein écran natif permettrait d'avancer, on s'en passe
+    }
+
+    function demarrerLecteur(depuis) {
+      ecran('lecteur');
+      try { video.currentTime = depuis; } catch (e) { /* métadonnées pas encore là */ }
+      video.addEventListener('loadedmetadata', function once() {
+        video.removeEventListener('loadedmetadata', once);
+        if (video.currentTime < depuis) { video.currentTime = depuis; }
+      });
+      var p = video.play();
+      if (p && p['catch']) { p['catch'](function () { voile.hidden = false; }); }
+    }
+
+    document.getElementById('conv-go').addEventListener('click', function () {
+      revoirMode = false;
+      demarrerLecteur(vu);
+    });
+    document.getElementById('revoir').addEventListener('click', function () {
+      revoirMode = true;
+      document.body.classList.add('verrou');
+      conv.hidden = false;
+      video.controls = true;
+      demarrerLecteur(0);
+      var fermer = document.createElement('button');
+      fermer.type = 'button'; fermer.className = 'conv-fermer'; fermer.textContent = 'Fermer ✕';
+      fermer.addEventListener('click', function () { video.pause(); fermer.remove(); video.controls = false; ouvrirSite(); });
+      scr.lecteur.appendChild(fermer);
+    });
+
+    // --- point d'entrée ------------------------------------------------------
+    window.addEventListener('hashchange', function () { if (/k=/.test(location.hash)) { location.reload(); } });
+    (function entree() {
+      var jeton = lireJeton();
       if (!window.crypto || !crypto.subtle) {
-        gateErr.textContent = "Ce navigateur ne sait pas vérifier les empreintes (il faut une connexion https). Essaie depuis un autre appareil.";
-        gateErr.hidden = false;
+        scr.refus.querySelector('.conv-msg').textContent = "Ce navigateur ne sait pas vérifier la convocation (il faut une connexion https). Ouvre le lien depuis un autre appareil.";
+        ecran('refus');
         return;
       }
-      Promise.all([sha40(CFG.saltNames, raw), sha40(CFG.saltElect, raw)]).then(function (h) {
+      if (!jeton) { ecran('refus'); return; }
+      Promise.all([sha40(CFG.saltNames, jeton), sha40(CFG.saltElect, jeton)]).then(function (h) {
         var name = CFG.names[h[0]];
         if (!name) {
-          gateErr.textContent = "Cette adresse ne figure pas au registre. Soit tu t'es trompé, soit tu es Kransvelt. Les deux sont graves.";
-          gateErr.hidden = false;
+          try { localStorage.removeItem(JETON_KEY); } catch (e) { /* rien */ }
+          ecran('refus');
           return;
         }
         me.name = name; me.nh = h[0]; me.eh = h[1];
-
-        var saved = recall(key());
-        if (saved) {
-          var parts = saved.split('|');
-          gate.hidden = true;
-          result.hidden = false;
-          delib.innerHTML = '';
-          var d = document.createElement('div');
-          d.textContent = "› Le Comité ne délibère qu'une fois par adresse. Verdict déjà rendu.";
-          delib.appendChild(d);
-          showVerdict(parseInt(parts[0], 10), parts[1] === '1');
-          result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.getElementById('conv-nom').textContent = name;
+        document.getElementById('conv-num').textContent = h[0].slice(0, 4).toUpperCase();
+        if (recall(vuKey()) === '1') {      // transmission déjà vue : accès direct
+          ouvrirSite();
+          lancerCandidature(false);
           return;
         }
-
-        gate.hidden = true;
-        quizHead.textContent = "Étape 2 — Évaluation d'aptitude · candidat : " + name;
-        quiz.hidden = false;
-        quiz.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      })['catch'](function () {
-        gateErr.textContent = 'La vérification a échoué. Réessaie.';
-        gateErr.hidden = false;
-      });
-    });
+        vu = parseFloat(recall(posKey()) || '0') || 0;
+        document.getElementById('conv-reprise').hidden = vu < 3;
+        ecran('intro');
+      })['catch'](function () { ecran('refus'); });
+    })();
 
     quizForm.addEventListener('submit', function (ev) {
       ev.preventDefault();
