@@ -332,6 +332,7 @@
       return s + q.o.reduce(function (m, o) { return Math.max(m, o[1]); }, 0);
     }, 0);
 
+    var PASSE = 'Transmission écourtée par le candidat. Le Comité prend note.';
     var DELIB = [
       "Vérification de la convocation…",
       'Croisement avec les six éditions précédentes…',
@@ -506,6 +507,7 @@
 
     function runDeliberation(score, retenu) {
       delib.innerHTML = '';
+      if (recall(key() + '-passe') === '1' && DELIB.indexOf(PASSE) === -1) { DELIB.splice(1, 0, PASSE); }
       var k = 0;
       (function next() {
         if (k < DELIB.length) {
@@ -640,6 +642,26 @@
     } else {
       btnPlein.hidden = true;   // iPhone : le plein écran natif permettrait d'avancer, on s'en passe
     }
+
+    // Passer la transmission : possible, mais il faut le vouloir (deux clics), et c'est noté.
+    var btnPasser = document.getElementById('conv-passer');
+    var passerTimer = null;
+    btnPasser.addEventListener('click', function () {
+      if (revoirMode) { video.pause(); var f = document.querySelector('.conv-fermer'); if (f) { f.click(); } return; }
+      if (!btnPasser.classList.contains('arme')) {
+        btnPasser.classList.add('arme');
+        btnPasser.textContent = 'Sûr ? Re-clique';
+        clearTimeout(passerTimer);
+        passerTimer = setTimeout(function () { btnPasser.classList.remove('arme'); btnPasser.textContent = 'Passer'; }, 4000);
+        return;
+      }
+      clearTimeout(passerTimer);
+      store(vuKey(), '1'); store(posKey(), '0'); store(key() + '-passe', '1');
+      video.pause();
+      try { if (document.fullscreenElement) { document.exitFullscreen(); } } catch (e) { /* rien */ }
+      document.getElementById('conv-fin-titre').firstChild.textContent = 'Transmission coupée. Ce n\'est pas fini, ';
+      ecran('fin');
+    });
 
     function demarrerLecteur(depuis) {
       ecran('lecteur');

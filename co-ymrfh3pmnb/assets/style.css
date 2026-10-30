@@ -613,3 +613,11 @@ body.questionnaire .jeu { margin-top: 0; border-top: 0; padding-top: 0; }
 .annonce-adresses { white-space: pre-wrap; word-break: break-all; font-family: var(--mono); font-size: 0.78rem; background: var(--ink-deep); border: 1px solid var(--rule); padding: 0.7rem; margin: 0 0 0.6rem; color: var(--vellum); }
 .annonce-fin { margin-top: 1.2rem; font-style: italic; }
 .annonce-signature { font-family: var(--display); text-align: right; margin: 0.5rem 0 0; }
+.conv-passer { white-space: nowrap; }
+.conv-passer.arme { border-color: var(--seal); color: var(--seal); }
+#conv-temps { white-space: nowrap; font-variant-numeric: tabular-nums; }
+@media (max-width: 560px) {
+  .conv-barre { flex-wrap: wrap; row-gap: 0.55rem; }
+  .conv-progres { order: -1; flex: 1 0 100%; }
+  .conv-passer { margin-left: auto; }
+}

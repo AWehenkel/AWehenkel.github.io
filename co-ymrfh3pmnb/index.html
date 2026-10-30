@@ -37,9 +37,9 @@
   <div class="conv-ecran" id="conv-intro" hidden>
     <p class="eyebrow">Convocation nº <span id="conv-num">—</span> · Saison II</p>
     <h1><span id="conv-nom">—</span>, le Comité a un message pour toi.</h1>
-    <p class="conv-msg">Durée : 3 minutes 17. Monte le son. On ne peut ni avancer, ni passer.</p>
+    <p class="conv-msg">Durée : 3 minutes 17. Monte le son. On ne peut pas avancer — et passer, le Comité le saura.</p>
     <ol class="conv-etapes">
-      <li><b>La transmission</b> — 3 min 17, en entier.</li>
+      <li><b>La transmission</b> — 3 min 17.</li>
       <li><b>Ta candidature</b> — 8 questions, environ 2 minutes, juste après.</li>
       <li><b>Le verdict</b> — rendu une seule fois.</li>
     </ol>
@@ -50,7 +50,7 @@
 
   <div class="conv-ecran" id="conv-fin" hidden>
     <p class="eyebrow">Fin de la transmission</p>
-    <h1>Ce n'est pas fini, <span id="conv-nom2">—</span>.</h1>
+    <h1 id="conv-fin-titre">Ce n'est pas fini, <span id="conv-nom2">—</span>.</h1>
     <p class="conv-msg">Ton dossier est ouvert mais vide. Huit questions, deux minutes, une seule tentative : le Comité délibère sur tes réponses, et sur rien d'autre.</p>
     <button type="button" class="primary" id="conv-dossier">Remplir ma candidature</button>
   </div>
@@ -66,6 +66,7 @@
       <div class="conv-progres" aria-hidden="true"><div id="conv-fil"></div></div>
       <span id="conv-temps">0:00 / 3:17</span>
       <span class="conv-ensuite">ensuite : 8 questions</span>
+      <button type="button" id="conv-passer" class="conv-passer">Passer</button>
       <button type="button" id="conv-plein" aria-label="Plein écran">⛶</button>
     </div>
     <div class="conv-pause-voile" id="conv-voile" hidden><button type="button" class="primary" id="conv-reprendre">Reprendre la transmission</button></div>
