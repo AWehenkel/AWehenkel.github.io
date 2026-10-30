@@ -278,52 +278,52 @@
     var CFG = window.CO_CONFIG;
 
     var QUESTIONS = [
-      { q: "Le groupe te demande le programme trois semaines avant le départ. Tu réponds :", o: [
-        ["Un indice par semaine, pas un de plus.", 12],
-        ["Rien. Le silence est une activité à part entière.", 10],
-        ["Un fichier avec les horaires et les temps de trajet.", 2],
-        ["Je transfère la question au Comité et je disparais.", 6]
+      { q: "Lara perd la finale du jeu que tu as prévu. Tu as environ quatre secondes.", o: [
+        ["Il y avait une deuxième manche. Il y a toujours eu une deuxième manche.", 12],
+        ["Je déclare un match nul et je change de sujet.", 10],
+        ["Je fais le mort, comme Kransvelt.", 5],
+        ["Je lui réexplique calmement les règles.", 1]
       ]},
-      { q: "Le budget, tu l'annonces :", o: [
-        ["Dès le départ, à l'euro près.", 10],
-        ["Juste après l'encaissement de l'acompte.", 6],
-        ["Par tranches, pour amortir le choc.", 8],
-        ["Jamais. On verra bien sur place.", 3]
+      { q: "Tu dois voir ton co-organisateur en secret. Ta couverture :", o: [
+        ["On va au resto le plus populaire de Liège : j'aime le risque, et je suis un peu exhibitionniste.", 10],
+        ["Visio à 23 h, caméras coupées, pseudonymes.", 8],
+        ["« On va courir ensemble. » Personne ne viendra vérifier.", 11],
+        ["J'écris par erreur dans le groupe principal.", 1]
       ]},
-      { q: "On te propose de réintroduire le warpool.", o: [
-        ["Non.", 14],
-        ["Non, mais avec un règlement écrit cette fois.", 4],
-        ["Oui, et en version aquatique.", 1],
-        ["Je demande d'abord l'avis de Pauline.", 8]
+      { q: "Le week-end est un triomphe. Au registre, le mérite revient :", o: [
+        ["À moi, évidemment.", 6],
+        ["À mon binôme, qui a tout fait. Comme à Reims. Comme à Eindhoven.", 12],
+        ["Au Comité, qui n'a rien fait mais tient le stylo.", 9],
+        ["À Ben. Merci Ben.", 7]
       ]},
-      { q: "Le gîte ne dispose que d'une salle de bain pour onze. Pour toi :", o: [
-        ["Je vérifie le nombre de douches avant de réserver.", 12],
-        ["C'est un puissant facteur de cohésion.", 7],
-        ["J'affiche un tableau de rotation dans le couloir.", 9],
-        ["Je n'avais jamais songé à regarder.", 2]
+      { q: "L'activité physique obligatoire, tu choisis :", o: [
+        ["Paintball.", 6],
+        ["Paintball, mais c'est Pauline qui arbitre.", 12],
+        ["Paintball, en civil, comme Pauline la première fois.", 3],
+        ["Paintball. Il n'y a jamais eu d'autre réponse.", 9]
       ]},
-      { q: "L'activité physique obligatoire, tu la calibres :", o: [
-        ["Correctement, comme le char à voile.", 12],
-        ["Légèrement au-dessus des capacités du groupe.", 9],
-        ["Très au-dessus. C'est ainsi qu'on fabrique des légendes.", 5],
-        ["Je laisse le hasard et la météo décider.", 3]
+      { q: "Ton planning du week-end tient sur :", o: [
+        ["Une énigme par jour, et rien d'autre.", 12],
+        ["Une serviette en papier, qu'on perdra en route.", 7],
+        ["Un Google Sheet avec onglets de couleur et temps de trajet.", 5],
+        ["Dans ma tête, sous réserve.", 3]
       ]},
-      { q: "Lara perd la finale du jeu que tu avais prévu. Ton plan :", o: [
-        ["Un second jeu, immédiatement, qu'elle peut gagner.", 11],
-        ["Je truque discrètement le premier.", 8],
-        ["Je ne prévois aucune finale, justement.", 6],
-        ["Aucun plan. J'accepte mon sort.", 4]
+      { q: "Le samedi soir, l'animation :", o: [
+        ["Karaoké : on part à la recherche de Mimi et du troll.", 11],
+        ["Soirée casque : trois canaux, un schisme garanti.", 9],
+        ["Une fausse demande en mariage. Andrea est disponible.", 8],
+        ["Au lit à 22 h 30, on a de la route demain.", 1]
       ]},
-      { q: "Combien de groupes de discussion secrets es-tu prêt à créer ?", o: [
-        ["Zéro. Tout passe par la boîte anonyme.", 12],
-        ["J'en ai déjà créé un en lisant la question.", 10],
-        ["Un, pour les décisions sérieuses.", 8],
-        ["Trois, dont un pour parler des deux autres.", 6]
+      { q: "À ta murder party, deux Thibaud se présentent. Tu :", o: [
+        ["Gardes le faux. Il est plus sympa.", 12],
+        ["Demandes une pièce d'identité.", 5],
+        ["En élimines un au hasard : c'est le jeu.", 8],
+        ["Ne remarques rien.", 2]
       ]},
       { q: "Neuf mois se sont écoulés depuis la dernière édition. Pour toi, c'est :", o: [
         ["Un scandale, et quelqu'un doit en répondre.", 12],
         ["Je viens seulement de m'en rendre compte.", 9],
-        ["La faute de quelqu'un d'autre, clairement.", 7],
+        ["La faute d'Antoine : il modélise des tendances toute la journée, mais celle-là, il la regarde monter sans rien faire.", 7],
         ["Un rythme de croisière agréable.", 5]
       ]}
     ];
@@ -677,5 +677,45 @@
     });
 
     buildQuiz();
+
+    // Une question par écran : grosses cartes, avance automatique, barre de progression.
+    (function pasAPas() {
+      var qs = quizQs.querySelectorAll('.question');
+      var prec = document.getElementById('quiz-prec');
+      var suiv = document.getElementById('quiz-suiv');
+      var envoyer = document.getElementById('quiz-btn');
+      var compteur = document.getElementById('quiz-compteur');
+      var jauge = document.getElementById('quiz-jauge-fil');
+      var i = 0, timer = null;
+      function repondu(k) { return !!qs[k].querySelector('input:checked'); }
+      function montrer(k) {
+        i = Math.max(0, Math.min(qs.length - 1, k));
+        Array.prototype.forEach.call(qs, function (q, j) { q.hidden = j !== i; });
+        var faites = Array.prototype.filter.call(qs, function (q) { return q.querySelector('input:checked'); }).length;
+        compteur.textContent = 'Question ' + (i + 1) + ' / ' + qs.length;
+        jauge.style.width = (100 * faites / qs.length) + '%';
+        prec.style.visibility = i === 0 ? 'hidden' : 'visible';
+        var derniere = i === qs.length - 1;
+        suiv.hidden = derniere;
+        suiv.disabled = !repondu(i);
+        envoyer.hidden = !derniere;
+        envoyer.disabled = !derniere || faites < qs.length;
+        quizErr.hidden = true;
+      }
+      quizQs.addEventListener('change', function (e) {
+        if (e.target.type !== 'radio') { return; }
+        montrer(i);   // met à jour jauge et boutons
+        clearTimeout(timer);
+        if (i < qs.length - 1) {
+          timer = setTimeout(function () {
+            montrer(i + 1);
+            quiz.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 380);
+        }
+      });
+      prec.addEventListener('click', function () { clearTimeout(timer); montrer(i - 1); });
+      suiv.addEventListener('click', function () { if (repondu(i)) { montrer(i + 1); } });
+      montrer(0);
+    })();
   })();
 })();

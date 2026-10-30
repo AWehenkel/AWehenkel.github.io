@@ -287,8 +287,16 @@
     <div class="panel" id="quiz" hidden>
       <h3 id="quiz-head">Étape 2 — Évaluation d'aptitude</h3>
       <form id="quiz-form" novalidate>
+        <div class="quiz-progres">
+          <span id="quiz-compteur">Question 1 / 8</span>
+          <div class="quiz-jauge" aria-hidden="true"><div id="quiz-jauge-fil"></div></div>
+        </div>
         <div id="quiz-questions"></div>
-        <button type="submit" class="primary" id="quiz-btn">Soumettre ma candidature</button>
+        <div class="quiz-nav">
+          <button type="button" id="quiz-prec">← Précédent</button>
+          <button type="button" class="primary" id="quiz-suiv" disabled>Suivant →</button>
+          <button type="submit" class="primary" id="quiz-btn" hidden>Soumettre ma candidature</button>
+        </div>
         <div class="error" id="quiz-error" hidden></div>
       </form>
     </div>

@@ -12,27 +12,27 @@
  * ---------------------------------------------------------------------- */
 
 window.CO_CONFIG = {
-  saltNames: '318315cce4f14d83',
-  saltElect: 'e3ad16692d54c17b',
+  saltNames: 'a706ab3b62ffc2ef',
+  saltElect: '94e57a8032548bfc',
 
   names: {
-    "f24794b259eb74e5d43d3ca2756f0ea22861ae4f": "Andrea",
-    "56d075b6cb9900c9c31105c8f04ab50234a9e299": "Zava",
-    "4f06eeb26626037463914d7ad59d3e4a532e8765": "Antoine",
-    "eac5e0a9c51f4227426b22b4e66ccac9ba525ce3": "Rémy",
-    "b65ac6bf9702f0dcb0dc2da6d635e46d0cf52ba0": "Thibaud",
-    "a0ec3eac254351a38dbc0227230758dc9680fa8b": "Claire",
-    "90a19ddac24befebd8a9e4a584ab40c87979ed83": "Pierre",
-    "dcf7405895fdfb43f26946c0cea96c808843d6c7": "Pauline",
-    "135df131fbedecea4081fedf9a1a414b4c6e8802": "Quentin",
-    "f9914688017e2bb7ab8e27891f297525243095a5": "Max",
-    "be2bc13bd136e569a51246a6fd8a5011de127a2e": "Benjamin",
-    "dca1e999566e5a72543b6cf759938ad9c88bebb0": "Lara"
+    "e05385086a52523c0eebb3df121f747c9697bef5": "Andrea",
+    "f1f1275c95757f6ba1eec3c12f56be5003265eaa": "Zava",
+    "704e75f66e6709fb61fc675062718fa18b8414b2": "Antoine",
+    "8d093cd5bd83a94befe1c824dc198a1e817f06a1": "Rémy",
+    "02674a17903cbd6889f1e1aaaf3c7aa2f4b18f6a": "Thibaud",
+    "b22fbb308ef4635cfbafab9cd3a922d73b3c4c93": "Claire",
+    "3630885a5a917c453974cb3c614ecb4ab28389ef": "Pierre",
+    "610df9f8a60f818bc2686315b52418b7fc1023fc": "Pauline",
+    "27429755bf41c1209f7f428344e4fe22a1bc9493": "Quentin",
+    "4dba67f500e6e41e6cc9027fd19829590d232b50": "Max",
+    "1ba5772d2a8a2659d7421a0a155186229d42578e": "Benjamin",
+    "d24d3fbdb3732b662e0dced0a224463930c66bb5": "Lara"
 },
 
   elect: [
-    "49230a66a2fe2cf02785fe6ff2135fe24ca81a6f",
-    "b5354485b25fd2d0f503e7565c794682f158e15b"
+    "0c10e83393afa2a2f10ae5304683224c3cb3b836",
+    "d9483709dc66a91354d260bbddd15f63a4c39b6a"
 ],
 
   edition: 's2e1'

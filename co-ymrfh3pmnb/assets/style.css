@@ -563,3 +563,42 @@ body.verrou .page { display: none; }
 /* après la vidéo : uniquement la candidature */
 body.questionnaire .page > :not(#candidature) { display: none; }
 body.questionnaire .jeu { margin-top: 0; border-top: 0; padding-top: 0; }
+
+/* ---- questionnaire pas à pas, pensé pour le pouce ---- */
+.quiz-progres { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1.2rem; font-family: var(--mono); font-size: 0.78rem; color: var(--vellum-dim); }
+.quiz-progres span { white-space: nowrap; }
+.quiz-jauge { flex: 1; height: 4px; background: var(--rule); position: relative; }
+#quiz-jauge-fil { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--brass); transition: width 0.3s ease; }
+#quiz .question { border-top: 0; padding: 0; animation: surface 0.35s ease both; }
+#quiz .question legend { font-size: clamp(1.2rem, 5vw, 1.4rem); margin-bottom: 1.1rem; }
+#quiz .opts { gap: 0.65rem; }
+#quiz .opt {
+  align-items: center; min-height: 3.2rem; padding: 0.8rem 1rem;
+  border: 1px solid var(--rule); background: var(--ink-deep);
+  font-size: 1.05rem; line-height: 1.35;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+#quiz .opt input { margin-top: 0; width: 1.15rem; height: 1.15rem; }
+#quiz .opt:hover { border-color: var(--brass-soft); }
+#quiz .opt:has(input:checked) { border-color: var(--brass); background: rgba(201, 162, 77, 0.14); }
+#quiz .opt:has(input:checked) span { color: var(--brass-soft); }
+#quiz .opt:has(input:focus-visible) { outline: 2px solid var(--brass-soft); outline-offset: 2px; }
+.quiz-nav { display: flex; gap: 0.75rem; justify-content: space-between; align-items: center; margin-top: 1.5rem; }
+.quiz-nav button { min-height: 3rem; }
+
+@media (max-width: 560px) {
+  body.questionnaire { padding-top: max(1.25rem, env(safe-area-inset-top)); padding-left: 12px; padding-right: 12px; }
+  body.questionnaire .jeu h2 { font-size: 1.9rem; }
+  body.questionnaire .jeu .rules { font-size: 0.98rem; }
+  #quiz.panel, #gate.panel, #result.panel { padding: 1.2rem 0.95rem; margin-top: 1.25rem; }
+  .quiz-nav {
+    position: sticky; bottom: 0; margin-inline: -0.95rem; padding: 0.75rem 0.95rem max(0.75rem, env(safe-area-inset-bottom));
+    background: linear-gradient(transparent, var(--ink-raised) 30%);
+  }
+  .quiz-nav .primary { flex: 1; }
+  .conv-ecran .primary, #conv-fin .primary { width: 100%; min-height: 3.2rem; }
+  .conv-ecran h1 { font-size: 2rem; }
+  .conv-etapes { font-size: 1rem; }
+  .conv-barre { gap: 0.6rem; }
+}
